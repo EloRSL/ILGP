@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <title>Za Gajo ♡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        /* --- DEFINICIJA SPREMENLJIVK IN OSNOV --- */
+        :root {
+            --primary: #ff6b9d; /* Glavna roza barva */
+            --accent: #7e22ce;  /* Poudarek vijolične */
+            --glass: rgba(255, 255, 255, 0.15); /* Učinek motnega stekla */
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #2a1b3d 25%, #4a1942 50%, #8e2a5b 75%, #d63a77 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,705 +25,618 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e22ce 50%, #e91e63 75%, #ff6b9d 100%);
+            font-family: 'Lato', sans-serif;
+            background: var(--bg-gradient);
             background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientBG 25s ease infinite;
             min-height: 100vh;
-            overflow-x: hidden;
-            touch-action: pan-y;
+            color: white;
+            overflow-x: hidden; 
+            position: relative;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        .stars {
+        /* --- OVOJNICA (INTRO SCREEN) - PRENOVLJENO --- */
+        #intro-overlay {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        .star.small { width: 1.5px; height: 1.5px; }
-        .star.medium { width: 2.5px; height: 2.5px; }
-        .star.large { 
-            width: 3px; 
-            height: 3px;
-            box-shadow: 0 0 8px rgba(255,255,255,0.8);
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
-        }
-
-        .container {
-            max-width: 100%;
-            padding: 20px 15px 80px 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 10px;
-            animation: fadeInDown 1s ease;
-        }
-
-        .header h1 {
-            font-size: 3em;
-            color: white;
-            text-shadow: 0 0 30px rgba(255,107,157,0.9), 0 0 60px rgba(255,107,157,0.6);
-            margin-bottom: 15px;
-            font-weight: normal;
-            letter-spacing: 6px;
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 30px rgba(255,107,157,0.9), 0 0 60px rgba(255,107,157,0.6); }
-            50% { text-shadow: 0 0 40px rgba(255,107,157,1), 0 0 80px rgba(255,107,157,0.9); }
-        }
-
-        .header p {
-            font-size: 1.1em;
-            color: rgba(255,255,255,0.95);
-            font-style: italic;
-            text-shadow: 0 2px 15px rgba(0,0,0,0.5);
-            line-height: 1.6;
-            padding: 0 10px;
-        }
-
-        .swipe-hint {
-            text-align: center;
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .photo-gallery {
-            position: relative;
-            width: 100%;
-            /* Allow dots and shadows to be visible — actual clipping happens in .photo-viewport */
-            overflow: visible;
-            margin-bottom: 40px;
-        }
-
-        /* New viewport wrapper to clip the sliding cards while keeping dots visible */
-        .photo-viewport {
-            width: 100%;
-            overflow: hidden;
-            border-radius: 0; /* inherit if needed */
-        }
-
-        .photo-slider {
-            display: flex;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            touch-action: pan-x;
-            will-change: transform;
-        }
-
-        .photo-card {
-            min-width: 100%;
-            padding: 0 15px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .photo-content {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
-        }
-
-        .photo-content img {
-    width: 100%;
-    aspect-ratio: 9 / 16;   /* bolj stisnjeno kot 9/16 */
-    max-height: 1000px;     /* doda omejitev višine */
-    object-fit: cover;
-    display: block;
-    border-radius: 15px;   /* opcijsko malo zaobljeni robovi */
-}
-
-        .photo-caption {
-            padding: 25px 20px;
-            text-align: center;
-            color: white;
-            font-size: 1.1em;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            background: rgba(126,34,206,0.4);
-            line-height: 1.6;
-        }
-
-        .slider-dots {
+            background: #1a1a2e; 
+            z-index: 9999;
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .envelope-container {
+            cursor: pointer;
+            transition: transform 0.3s ease;
             position: relative;
-            z-index: 3; /* be above photo content shadows */
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255,255,255,0.6);
+        .envelope-container:hover {
+            transform: scale(1.02); 
         }
 
-        .dot.active {
-            background: white;
-            box-shadow: 0 0 15px rgba(255,255,255,0.8);
-            transform: scale(1.3);
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #e0e0e0; /* Ozadje koverte (notranjost) */
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Pismo poravnamo na dno */
+            /* overflow: hidden; SMO ODSTRANILI, DA SE PISMO VIDI KO GRE VEN */
         }
 
-        .tap-counter {
-            text-align: center;
-            margin: 50px 0 30px 0;
+        /* POKROV (Zgornji del) - Najvišji nivo */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #f8f8f8; /* Svetlejša barva za pokrov */
+            transform-origin: top;
+            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) 0s, z-index 0.1s 0.5s;
+            z-index: 20; /* Najvišje, dokler se ne odpre */
         }
 
-        .heart-tap {
-            font-size: 4em;
-            color: #ff6b9d;
-            display: inline-block;
-            filter: drop-shadow(0 0 20px rgba(255,107,157,0.9));
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.1s ease;
-        }
-
-        .heart-tap:active {
-            transform: scale(0.85);
-        }
-
-        .tap-count {
-            color: white;
-            font-size: 1.3em;
-            margin-top: 15px;
-            text-shadow: 0 0 15px rgba(255,107,157,0.8);
-        }
-
-        .tap-message {
-            color: rgba(255,255,255,0.8);
-            font-size: 1em;
-            margin-top: 10px;
-            font-style: italic;
-            min-height: 30px;
-        }
-
-        .love-note {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(30px);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 35px;
-            padding: 35px 25px;
-            box-shadow: 0 15px 60px rgba(0,0,0,0.4);
-            margin-bottom: 40px;
-            animation: fadeInUp 1.2s ease;
-        }
-
-        .love-note h2 {
-            color: white;
-            margin-bottom: 25px;
-            font-size: 2em;
-            text-align: center;
-            text-shadow: 0 0 20px rgba(255,107,157,0.8);
-        }
-
-        .love-note p {
-            color: rgba(255,255,255,0.95);
-            line-height: 1.4;
-            font-size: 1.05em;
-            text-align: center;
-            margin-bottom: 6px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .reasons-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .reason-card {
-            background: linear-gradient(135deg, rgba(255,107,157,0.85) 0%, rgba(126,34,206,0.85) 100%);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 25px 15px;
-            border-radius: 20px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.3);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            animation: fadeInUp 1.4s ease;
-        }
-
-        .reason-card h3 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .reason-card p {
-            font-size: 0.95em;
-            color: rgba(255,255,255,0.95);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            line-height: 1.4;
-        }
-
-        .shake-feature {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 25px;
-            padding: 30px 20px;
-            margin: 40px 0;
-            text-align: center;
-            animation: fadeInUp 1.6s ease;
-        }
-
-        .shake-feature h3 {
-            color: white;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(255,107,157,0.8);
-        }
-
-        .enable-shake {
-            margin-top: 10px;
-            padding: 8px 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.08);
-            color: white;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .enable-shake[disabled] {
-            opacity: 0.5;
-            cursor: default;
-        }
-
-        .shake-message {
-            color: white;
-            font-size: 1.8em;
-            margin-top: 20px;
-            min-height: 60px;
-            line-height: 1.5;
-            text-shadow: 0 2px 15px rgba(0,0,0,0.5);
-            padding: 0 10px;
-        }
-
-        .footer {
-            text-align: center;
-            color: white;
-            padding: 30px 20px;
-            font-size: 1.1em;
-            text-shadow: 0 0 20px rgba(255,107,157,0.8);
-            animation: fadeInUp 1.8s ease;
-            line-height: 1.6;
-        }
-
-        .love-burst {
-            position: fixed;
+        /* ŽEPEK (Spodnji del) - Srednji nivo */
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid #ececec;
+            border-right: 150px solid #ececec;
+            border-bottom: 100px solid #d0d0d0;
+            border-top: 100px solid transparent;
+            border-radius: 0 0 10px 10px;
+            z-index: 10; /* Višje od pisma, nižje od pokrova */
             pointer-events: none;
-            font-size: 2em;
-            color: #ff6b9d;
-            animation: burstUp 1s ease-out forwards;
-            z-index: 1000;
         }
 
-        @keyframes burstUp {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) scale(0);
-                opacity: 0;
-            }
+        /* PISMO - Najnižji nivo (skrito v žepku) */
+        .letter {
+            position: absolute;
+            width: 280px; /* Malo ožje od koverte, da lepše sede */
+            height: 170px; 
+            background: #fffaf0; 
+            bottom: 0; /* Začnemo na dnu koverte */
+            left: 10px; /* Centrirano (300 - 280) / 2 */
+            transition: transform 5s ease-in-out, box-shadow 4s ease; /* ZELO POČASNO! */
+            z-index: 5; /* Nižje od žepka (10) */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: #333;
+            border: 1px solid #eee;
+            padding: 15px;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .letter h2 { 
+            font-family: 'Dancing Script', cursive; 
+            font-size: 2.2em; 
+            color: var(--primary); 
+            margin-bottom: 5px; 
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* --- ANIMACIJE IN EFEKTI --- */
+
+        /* Ko se odpre: Pokrov gre nazaj */
+        .envelope-container.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 1; /* Ko se odpre, gre pokrov čisto zadaj */
         }
+
+        /* Ko se odpre: Pismo gre gor */
+        .envelope-container.open .letter {
+            transform: translateY(-120px); /* Dvigne se iz koverte */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 107, 157, 0.4); /* EFEKT SIJAJA */
+            z-index: 5; /* Ko je zunaj, je nad vsem (opcijsko, lahko ostane v žepku) */
+        }
+
+        /* DODATNI EFEKT: Lebdeča srčka okoli pisma */
+        .envelope-container.open .letter::after {
+            content: '💖';
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 24px;
+            animation: floatingHeart 3s infinite ease-in-out;
+            opacity: 0;
+            animation-delay: 2s; /* Počaka da se pismo dvigne */
+        }
+
+        .envelope-container.open .letter::before {
+            content: '✨';
+            position: absolute;
+            top: auto;
+            bottom: 50px;
+            left: 20px;
+            font-size: 24px;
+            animation: floatingSparkle 4s infinite ease-in-out;
+            opacity: 0;
+            animation-delay: 0.5s;
+        }
+        .envelope-container.open {
+            animation: heart-pulse 1.5s infinite ease-in-out; 
+            transform: scale(1.02); /* Ohrani osnovni transform, da prepreči utripanje hover efekta */
+        }
+        @keyframes floatingHeart {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-60px) rotate(20deg); opacity: 0; } /* POPRAVEK: Dvigne se 60px navzgor (prej 40px) */
+        }
+
+        @keyframes floatingSparkle {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.2; } /* Dodan translateY(0) */
+            50% { transform: translateY(-30px) scale(1.2) rotate(180deg); opacity: 1; } /* Sredina animacije */
+            100% { transform: translateY(-60px) scale(0.8) rotate(360deg); opacity: 0; } /* POPRAVEK: Dvigne se 60px navzgor */
+        }
+        @keyframes heart-pulse {
+            0% { transform: scale(1.02); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1.02); }
+        }
+                
+        /* --- OSTALI STILI (Nespremenjeni) --- */
+        .tap-hint { margin-top: 60px; color: rgba(255,255,255,0.7); font-size: 1em; letter-spacing: 1px; animation: pulse 2s infinite; }
+        .main-content { opacity: 0; transition: opacity 1.5s ease; display: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px 15px 60px; position: relative; z-index: 2; }
+        header { text-align: center; padding: 70px 0 50px; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 5em; background: linear-gradient(to right, #fff, #ffd1e3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(255, 107, 157, 0.6)); line-height: 1.1; }
+        .subtitle { font-family: 'Playfair Display', serif; font-size: 1.3em; font-style: italic; color: rgba(255,255,255,0.9); margin-bottom: 40px; text-shadow: var(--text-shadow); }
+        .timer-section { margin-bottom: 70px; }
+        .timer-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 1.2em; margin-bottom: 20px; color: rgba(255,255,255,0.8); }
+        .timer-box { background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid var(--glass-border); border-radius: 25px; padding: 25px; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .time-unit { text-align: center; min-width: 80px; position: relative; }
+        .time-unit:not(:last-child)::after { content: ':'; position: absolute; right: -15px; top: 10%; font-size: 2em; color: rgba(255,255,255,0.3); font-family: 'Playfair Display', serif; }
+        .time-val { font-size: 2.8em; font-weight: 700; display: block; font-family: 'Playfair Display', serif; text-shadow: 0 2px 10px rgba(0,0,0,0.2); line-height: 1; margin-bottom: 5px; }
+        .time-label { font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+        .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.2em; margin: 80px 0 40px; position: relative; color: white; text-shadow: var(--text-shadow); }
+        .section-title::after { content: '♡'; display: block; font-size: 0.7em; color: var(--primary); margin-top: 10px; font-family: 'Dancing Script', cursive; }
+        .timeline { position: relative; max-width: 100%; margin: 60px 0; padding: 20px 0; }
+        .timeline::after { content: ''; position: absolute; width: 3px; background: rgba(255,255,255,0.2); top: 0; bottom: 0; left: 50%; margin-left: -1.5px; border-radius: 5px; }
+        .timeline-item { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; box-sizing: border-box; opacity: 0; transform: translateY(50px); transition: all 1s ease; }
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+        .timeline-item::after { content: '❤'; position: absolute; width: 36px; height: 36px; right: -18px; background-color: var(--primary); border: 4px solid #fff; top: 20px; border-radius: 50%; z-index: 1; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; box-shadow: 0 0 15px rgba(255, 107, 157, 0.5); }
+        .left { left: 0; }
+        .right { left: 50%; }
+        .left::before { content: " "; height: 0; position: absolute; top: 26px; width: 0; z-index: 1; right: 30px; border: medium solid white; border-width: 10px 0 10px 10px; border-color: transparent transparent transparent rgba(255,255,255,0.9); }
+        .right::before { content: " "; height: 0; position: absolute; top: 26px; width: 0; z-index: 1; left: 30px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent rgba(255,255,255,0.9) transparent transparent; }
+        .right::after { left: -18px; }
+        .content-box { padding: 25px; background: rgba(255,255,255,0.9); position: relative; border-radius: 15px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .content-box h3 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 8px; font-size: 1.4em; }
+        .date-label { font-size: 0.9em; color: var(--primary); display: block; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.5px; }
+        .content-box p { line-height: 1.6; font-size: 1.05em; }
+        .gallery-container { position: relative; height: 500px; display: flex; justify-content: center; align-items: center; perspective: 1000px; margin-bottom: 30px; }
+        .polaroid { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); width: 320px; position: absolute; transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; cursor: pointer; border-radius: 3px; }
+        .polaroid img { width: 100%; height: 300px; object-fit: cover; border: 1px solid #eee; }
+        .caption { font-family: 'Dancing Script', cursive; color: #444; font-size: 1.6em; text-align: center; margin-top: 20px; transform: rotate(-1deg); }
+        .polaroid.active { transform: translateX(0) translateY(0) rotate(0deg) scale(1.05); z-index: 10; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+        .polaroid.left { transform: translateX(-100px) translateY(20px) rotate(-12deg) scale(0.9); z-index: 5; opacity: 0.8; }
+        .polaroid.right { transform: translateX(100px) translateY(20px) rotate(12deg) scale(0.9); z-index: 5; opacity: 0.8; }
+        .gallery-hint { text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9em; margin-top: -20px; margin-bottom: 60px; }
+        .love-note-container { background: var(--glass); padding: 50px 30px; border-radius: 30px; margin: 80px auto; backdrop-filter: blur(20px); border: 2px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 700px; text-align: center; }
+        .note-title { font-family: 'Dancing Script', cursive; font-size: 2.8em; margin-bottom: 30px; color: var(--primary); text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .note-text p { font-family: 'Playfair Display', serif; font-size: 1.3em; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 8px; text-shadow: var(--text-shadow); }
+        .note-text br { display: block; margin: 15px 0; content: " "; }
+        .heart-section { text-align: center; margin: 100px 0 60px; position: relative; }
+        .big-heart { font-size: 6em; color: var(--primary); cursor: pointer; display: inline-block; transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.7)); user-select: none; animation: heartbeat 1.5s ease-in-out infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .big-heart:active { transform: scale(0.9) !important; animation: none; }
+        .heart-count-box { margin-top: 20px; font-family: 'Playfair Display', serif; font-size: 1.4em; text-shadow: var(--text-shadow); }
+        .mini-heart { position: fixed; font-size: 20px; color: var(--primary); pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 1000; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-150px) scale(0) rotate(360deg); opacity: 0; } }
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.6); font-size: 0.9em; border-top: 1px solid var(--glass-border); margin-top: 50px; }
+        .music-control { position: fixed; bottom: 25px; right: 25px; width: 55px; height: 55px; background: var(--glass); backdrop-filter: blur(10px); border: 2px solid var(--glass-border); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s ease; font-size: 24px; }
+        .music-control:hover { background: var(--primary); border-color: var(--primary); transform: scale(1.1); }
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        
+        /* --- PRILAGODITVE ZA MOBILNE NAPRAVE --- */
+        @media screen and (max-width: 768px) {
+            h1 { font-size: 3.5em; }
+            .subtitle { font-size: 1.1em; }
+            .timeline::after { left: 35px; } 
+            .timeline-item { width: 100%; padding-left: 75px; padding-right: 15px; }
+            .timeline-item::before { left: 65px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent rgba(255,255,255,0.9) transparent transparent; }
+            .left::after, .right::after { left: 17px; }
+            .right { left: 0%; }
+            .gallery-container { height: 400px; }
+            .polaroid { width: 260px; }
+            .polaroid img { height: 240px; }
+            .timer-box { gap: 10px; padding: 15px; }
+            .time-unit { min-width: 55px; }
+            .time-val { font-size: 1.8em; }
+            .time-unit:not(:last-child)::after { right: -8px; font-size: 1.5em; top: 5%; }
+            .envelope { width: 260px; height: 170px; }
+            .envelope::before {
+                border-left: 130px solid transparent;
+                border-right: 130px solid transparent;
+                border-top: 100px solid #f8f8f8;
+            }
+
+            .envelope::after {
+                border-left: 130px solid #ececec;
+                border-right: 130px solid #ececec;
+                border-bottom: 85px solid #d0d0d0;
+                border-top: 85px solid transparent;
+            }
+
+            .letter { 
+                width: 240px; /* Prilagojena širina */
+                height: 140px; 
+                left: 10px;
+                bottom: 0;
+            } 
+            
+            .envelope-container.open .letter { 
+                transform: translateY(-100px); /* Malo manjši dvig na telefonu */
+            } 
+        }
+        @keyframes pulse { 0% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.6; transform: scale(1); } }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>Za Gajo</h1>
-            <p>Mojo predrago punco in bodočo ženo. Zate svet, zate vse.</p>
-        </div>
 
-        <div class="swipe-hint">← Povleci levo za več fotografij →</div>
-
-        <div class="photo-gallery">
-            <div class="photo-viewport">
-                <div class="photo-slider" id="photoSlider">
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <img src="./tphoto1.JPG" alt="Najin spomin">
-                            <div class="photo-caption">Vsaka pustolovščina je lepša s tabo</div>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <img src="./tphoto2.JPG" alt="Najin spomin">
-                            <div class="photo-caption">Tvoj nasmeh razsvetli moj svet</div>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <img src="./photo3.JPG" alt="Najin spomin">
-                            <div class="photo-caption">Navadne trenutke spreminjaš v izjemne</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="slider-dots" id="sliderDots"></div>
-        </div>
-
-        <div class="tap-counter">
-            <div class="heart-tap" id="heartTap">♡</div>
-            <div class="tap-count">Tapkaj srce: <span id="tapCount">0</span>x</div>
-            <div class="tap-message" id="tapMessage"></div>
-        </div>
-
-        <div class="shake-feature">
-            <h3>Pretresi telefon</h3>
-            <button id="enableShake" class="enable-shake">Omogoči tresenje (za iPhone/Safari)</button>
-            <div class="shake-message" id="shakeMessage">Tresi me!</div>
-        </div>
-
-        <div class="love-note">
-            <h2>Zakaj Te Imam Rad</h2>
-                <p>Gaja, tvoj pogled kot plamen v meni gori,</p>
-                <p>v njem srečo najdem, ki nikdar ne zbledi.</p>
-                <p>Tvoj nasmeh kot sonce razsvetli najlepši cvet,</p>
-                <p>brez tebe življenje je tih, prazen svet.</p>
-                <p>
-                <br>
-                </p>
-                <p>Tvoj dotik me vodi kot nežna melodija,</p>
-                <p>v njem pleše najina večna harmonija.</p>
-                <p>Gaja, ti si pesem, ki nikdar ne utihne,</p>
-                <p>ljubezen v mojem srcu zate vedno utripne.</p>    
-            
-            <div class="reasons-grid">
-                <div class="reason-card">
-                    <h3>∞</h3>
-                    <p>Nešteto razlogov, da te cenim</p>
-                </div>
-                <div class="reason-card">
-                    <h3>♡</h3>
-                    <p>Tvoje čudovito srce</p>
-                </div>
-                <div class="reason-card">
-                    <h3>✨</h3>
-                    <p>Čarovnija, ki jo prinašaš</p>
-                </div>
-                <div class="reason-card">
-                    <h3>☀️</h3>
-                    <p>Tvoja žareča energija</p>
+    <div id="intro-overlay">
+        <div class="envelope-container" id="envelopeBtn">
+            <div class="envelope">
+                <div class="letter">
+                    <h2>Za Gajo ♡</h2>
+                    <p style="font-size: 0.9em; margin-top:15px; font-family: 'Playfair Display';">Posebno pismo zate...</p>
                 </div>
             </div>
         </div>
+        <div class="tap-hint">Pritisni ovojnico, da odpreš sporočilo 👆</div>
+    </div>
 
-        <div class="footer">
-            <p>Narejeno z ljubeznijo, samo zate Gaja 💕</p>
+    <canvas id="particles"></canvas>
+
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <header>
+                <h1>Draga Gaja</h1>
+                <p class="subtitle">Mojo predrago punco in bodočo ženo.<br>Zate svet, zate vse.</p>
+            </header>
+
+            <div class="timer-section">
+                <p class="timer-title">Skupaj ustvarjava spomine že...</p>
+                <div class="timer-box">
+                    <div class="time-unit">
+                        <span class="time-val" id="years">0</span>
+                        <span class="time-label">Let</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-val" id="days">0</span>
+                        <span class="time-label">Dni</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-val" id="hours">0</span>
+                        <span class="time-label">Ur</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-val" id="minutes">0</span>
+                        <span class="time-label">Min</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-val" id="seconds">0</span>
+                        <span class="time-label">Sek</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Najina Zgodba</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="content-box">
+                        <img src="photo1.JPG" alt="Začetek najine poti" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
+                        <h3>Uradni Začetek</h3>
+                        <span class="date-label">17. Februar 2024</span>
+                        <p>Dan, ko sva rekla "midva". Začetek najlepšega poglavja v mojem življenju. Skupaj zreva v isto smer.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content-box">
+                        <img src="photo3.JPG" alt="Tvoja igrivost" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
+                        <h3>Tvoja Igrivost</h3>
+                        <span class="date-label">Vsak dan</span>
+                        <p>Obožujem tvoj smisel za humor in kako znaš vsak trenutek spremeniti v zabavo. S tabo je življenje ena sama velika pustolovščina. Moja kraljica. 👑</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="content-box">
+                        <img src="photo2.JPG" alt="Tvoja milina" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
+                        <h3>Tvoja Nežnost</h3>
+                        <span class="date-label">Danes in za vedno</span>
+                        <p>V tvojem objemu najdem svoj mir. Tvoja milina in toplina sta moj dom, ne glede na to, kje sva.</p>
+                    </div>
+                </div>
+            </div>
+
+             <h2 class="section-title">Ujeti Trenutki</h2>
+             <div class="gallery-container" id="gallery">
+                 <div class="polaroid active">
+                     <img src="photo1.JPG" alt="Spomin 1">
+                     <div class="caption">Najin Dunaj ✨</div>
+                 </div>
+                 <div class="polaroid right">
+                     <img src="photo3.JPG" alt="Spomin 2">
+                     <div class="caption">Moja Burger Queen 🍔</div>
+                 </div>
+                 <div class="polaroid left">
+                     <img src="photo2.JPG" alt="Spomin 3">
+                     <div class="caption">Snežena kraljica ❤️</div>
+                 </div>
+             </div>
+             <p class="gallery-hint">Klikni na sliko, da jo preložiš 👆</p>
+
+            <div class="love-note-container">
+                <h2 class="note-title">Zakaj Te Imam Rad</h2>
+                <div class="note-text">
+                    <p>Gaja, tvoj pogled kot plamen v meni gori,</p>
+                    <p>v njem srečo najdem, ki nikdar ne zbledi.</p>
+                    <p>Tvoj nasmeh kot sonce razsvetli najlepši cvet,</p>
+                    <p>brez tebe življenje je tih, prazen svet.</p>
+                    <br>
+                    <p>Tvoj dotik me vodi kot nežna melodija,</p>
+                    <p>v njem pleše najina večna harmonija.</p>
+                    <p>Gaja, ti si pesem, ki nikdar ne utihne,</p>
+                    <p>ljubezen v mojem srcu zate vedno utripne.</p>    
+                </div>
+            </div>
+
+            <div class="heart-section">
+                <div class="big-heart" id="tapHeart">💖</div>
+                <div class="heart-count-box">
+                    Tvojih dotikov ljubezni: <span id="tapCounter" style="font-weight:bold; color:var(--primary);">0</span>
+                </div>
+                <p style="font-size: 0.9em; opacity: 0.7; margin-top: 10px;">Tapkaj srce za eksplozijo ljubezni! 💥</p>
+            </div>
+
+            <footer>
+                <p>Narejeno z neskončno ljubeznijo, samo zate Gaja 💕<br>Za vedno tvoj.</p>
+            </footer>
         </div>
     </div>
 
+    <div class="music-control" id="musicToggle">
+        🎵
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+        Vaš brskalnik ne podpira avdio elementa.
+    </audio>
+
     <script>
-        // Ustvari zvezde
-        const starsContainer = document.getElementById('stars');
-        const sizes = ['small', 'medium', 'large'];
+        // --- KONFIGURACIJA DATUMA ---
+        const startDate = new Date(2024, 1, 17); 
         
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.className = 'star ' + sizes[Math.floor(Math.random() * sizes.length)];
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            starsContainer.appendChild(star);
+        // --- SPREMENLJIVKE ZA DOM ELEMENTE ---
+        const envelopeBtn = document.getElementById('envelopeBtn');
+        const introOverlay = document.getElementById('intro-overlay');
+        const mainContent = document.getElementById('mainContent');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        
+        let isMusicPlaying = false;
+
+        // --- 1. ODPIRANJE OVOJNICE (POČASNEJŠE IN POPRAVLJENO) ---
+        envelopeBtn.addEventListener('click', () => {
+            envelopeBtn.classList.add('open');
+            document.querySelector('.tap-hint').style.opacity = '0';
+            
+            bgMusic.volume = 0.4; 
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.innerHTML = '⏸'; 
+            }).catch(e => console.log("Samodejno predvajanje ni uspelo, uporabnik mora klikniti gumb za glasbo."));
+
+            // Počakamo na animacijo (2000ms je dovolj za sinhronizacijo)
+            setTimeout(() => {
+                introOverlay.style.opacity = '0';
+                introOverlay.style.visibility = 'hidden';
+                mainContent.style.display = 'block';
+                
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                    initTimelineObserver(); 
+                }, 100);
+            }, 6000); 
+        });
+
+        // --- 2. NADZOR GLASBE ---
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicToggle.innerHTML = '🎵'; 
+            } else {
+                bgMusic.play();
+                musicToggle.innerHTML = '⏸'; 
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // --- 3. LOGIKA ŠTEVCA ZVEZE ---
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate; 
+
+            const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const years = Math.floor(daysTotal / 365);
+            const days = daysTotal % 365;
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('years').innerText = years;
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
         }
+        updateTimer();
+        setInterval(updateTimer, 1000);
 
-        // Swipe galerija
-        const slider = document.getElementById('photoSlider');
-        const dotsContainer = document.getElementById('sliderDots');
-        let currentSlide = 0;
-        const totalSlides = 3;
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
+        // --- 4. LOGIKA POLAROID GALERIJE ---
+        const cards = document.querySelectorAll('.polaroid');
+        let currentIndex = 0;
 
-        // Ustvari dots
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
-        }
+        function updateCards() {
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'left', 'right');
+                
+                let position = (index - currentIndex + cards.length) % cards.length;
 
-        function updateDots() {
-            const dots = dotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlide);
+                if (position === 0) {
+                    card.classList.add('active'); 
+                } else if (position === 1) {
+                    card.classList.add('right'); 
+                } else {
+                    card.classList.add('left'); 
+                }
             });
         }
 
-        function goToSlide(index) {
-            currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-            updateDots();
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateCards();
+            });
+        });
+        updateCards();
+
+        // --- 5. ANIMACIJA ČASOVNICE (Scroll) ---
+        function initTimelineObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 }); 
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
         }
 
-        slider.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        }, {passive: true});
-
-        slider.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            currentX = e.touches[0].clientX;
-            const diff = currentX - startX;
-            const offset = -currentSlide * 100 + (diff / window.innerWidth * 100);
-            slider.style.transition = 'none';
-            slider.style.transform = `translateX(${offset}%)`;
-        }, {passive: true});
-
-        slider.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            slider.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            
-            const diff = currentX - startX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && currentSlide > 0) {
-                    goToSlide(currentSlide - 1);
-                } else if (diff < 0 && currentSlide < totalSlides - 1) {
-                    goToSlide(currentSlide + 1);
-                } else {
-                    goToSlide(currentSlide);
-                }
-            } else {
-                goToSlide(currentSlide);
-            }
-        });
-
-        // Tap counter (upgraded to pointerdown for touch + mouse compatibility)
-        const heartTap = document.getElementById('heartTap');
-        const tapCount = document.getElementById('tapCount');
-        const tapMessage = document.getElementById('tapMessage');
+        // --- 6. INTERAKTIVNO SRCE (Eksplozija) ---
+        const tapHeart = document.getElementById('tapHeart');
+        const tapCounterDisplay = document.getElementById('tapCounter');
         let taps = 0;
 
-        const messages = [
-            "Še enkrat! 💕",
-            "Ljubim te več! ❤️",
-            "Neskončno! 💗",
-            "Vsak dan bolj! 💖",
-            "Za vedno! 💝",
-            "Moje srce je tvoje! 💘",
-            "Ti si vse! 💓",
-            "Moja ljubezen! 💞"
-        ];
-
-        function handleHeartTap(e) {
-            // prepreči dvojni event (pointerdown + click)
-            e.preventDefault();
-
+        tapHeart.addEventListener('pointerdown', (e) => {
+            e.preventDefault(); 
             taps++;
-            tapCount.textContent = taps;
-            tapMessage.textContent = messages[Math.min(taps - 1, messages.length - 1)];
+            tapCounterDisplay.innerText = taps;
 
-            let clientX = e.clientX, clientY = e.clientY;
-            // če je touch event (pointerType === 'touch') poišči touches
-            if (e.touches && e.touches[0]) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            }
+            const rect = tapHeart.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-            // Burst animacija
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const burst = document.createElement('div');
-                    burst.className = 'love-burst';
-                    burst.textContent = '♡';
-                    // pozicija v viewportu
-                    burst.style.left = (clientX + (Math.random() - 0.5) * 50) + 'px';
-                    burst.style.top = (clientY + (Math.random() - 0.5) * 50) + 'px';
-                    document.body.appendChild(burst);
-                    setTimeout(() => burst.remove(), 1000);
-                }, i * 50);
+            for(let i = 0; i < 10; i++) {
+                createMiniHeart(centerX, centerY);
             }
+        });
+
+        function createMiniHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.className = 'mini-heart';
+            const size = Math.random() * 20 + 15;
+            heart.style.fontSize = size + 'px';
+            
+            heart.style.left = (x - size/2) + 'px';
+            heart.style.top = (y - size/2) + 'px';
+            
+            document.body.appendChild(heart);
+
+            const angle = Math.random() * Math.PI * 2; 
+            const velocity = Math.random() * 150 + 80; 
+            const moveX = Math.cos(angle) * velocity;
+            const moveY = Math.sin(angle) * velocity - 100; 
+
+            setTimeout(() => {
+                 heart.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${Math.random()*360}deg) scale(0)`;
+                 heart.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => heart.remove(), 1000);
         }
 
-        // Uporabi pointerdown (pokrije touch + mouse)
-        heartTap.addEventListener('pointerdown', handleHeartTap);
+        // --- 7. ANIMIRANO OZADJE (Delci/Srčki) ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
 
-        // Shake detekcija (robustno)
-        const shakeMessage = document.getElementById('shakeMessage');
-        const shakeMessages = [
-            "Ti si moje vse! 💕",
-            "Ljubim tvoj nasmeh! 😊",
-            "Hvala, da si v mojem življenju! 🌟",
-            "S tabo je vse lepše! ✨",
-            "Moja najljubša oseba! 💖",
-            "Vsak dan s tabo je dar! 🎁",
-            "Ti si moja sreča! 🌈",
-            "Neskončno hvaležen zate! 💝"
-        ];
-        let lastShake = 0;
-        let motionEnabled = false;
-        let motionHandlerRef = null;
-
-        function motionHandler(e) {
-            // previdno z nullami
-            const acc = (e && (e.accelerationIncludingGravity || e.acceleration)) || null;
-            if (!acc) return;
-
-            const now = Date.now();
-            const threshold = 12; // malenkost nižji prag za boljšo odzivnost na telefone
-
-            // preveri vrednosti (nekatere naprave imajo undefined za posamezno os)
-            const ax = Math.abs(acc.x || 0);
-            const ay = Math.abs(acc.y || 0);
-            const az = Math.abs(acc.z || 0);
-
-            if (now - lastShake < 1000) return;
-
-            if (ax > threshold || ay > threshold || az > threshold) {
-                lastShake = now;
-                const randomMsg = shakeMessages[Math.floor(Math.random() * shakeMessages.length)];
-                shakeMessage.textContent = randomMsg;
-                // kratek reflow za animacijo
-                shakeMessage.style.animation = 'none';
-                setTimeout(() => {
-                    shakeMessage.style.animation = 'fadeInUp 0.5s ease';
-                }, 10);
-            }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-        function setupDeviceMotionListener() {
-            if (motionEnabled) return;
-            motionEnabled = true;
-            motionHandlerRef = motionHandler;
-            window.addEventListener('devicemotion', motionHandlerRef, {passive: true});
-            // posodobi UI
-            const btn = document.getElementById('enableShake');
-            if (btn) {
-                btn.textContent = 'Stres omogočen ✅';
-                btn.disabled = true;
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100; 
+                this.size = Math.random() * 15 + 8; 
+                this.speedY = Math.random() * 1 + 0.5; 
+                this.opacity = Math.random() * 0.4 + 0.1; 
+                this.type = Math.random() > 0.7 ? '❤' : '•';
             }
-        }
-
-        async function requestMotionPermission() {
-            const btn = document.getElementById('enableShake');
-            if (!window.DeviceMotionEvent) {
-                // ni podpore
-                btn.textContent = 'Senzor ni podprt';
-                btn.disabled = true;
-                return;
-            }
-
-            // iOS 13+ Safari zahteva requestPermission
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                try {
-                    const result = await DeviceMotionEvent.requestPermission();
-                    if (result === 'granted') {
-                        setupDeviceMotionListener();
-                    } else {
-                        btn.textContent = 'Dostop zavrnjen';
-                        btn.disabled = false;
-                    }
-                } catch (err) {
-                    console.error('Permission request failed', err);
-                    btn.textContent = 'Napaka';
+            update() {
+                this.y -= this.speedY; 
+                if (this.y < -50) {
+                    this.y = canvas.height + 50;
+                    this.x = Math.random() * canvas.width;
+                    this.opacity = Math.random() * 0.4 + 0.1;
                 }
-            } else {
-                // ostali brskalniki - dodaj direktno listener
-                setupDeviceMotionListener();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 182, 193, ${this.opacity})`;
+                ctx.font = this.size + 'px Arial';
+                ctx.fillText(this.type, this.x, this.y);
             }
         }
 
-        // priklop na gumb
-        const enableBtn = document.getElementById('enableShake');
-        enableBtn.addEventListener('click', (e) => {
-            requestMotionPermission();
-        });
-
-        // kot dodatno opcijo: poskusi omogočiti ob prvi interakciji (če user ne pritisne gumba)
-        // vendar ne pošljemo avtomatičnega requesta na iOS brez uporabnikove geste; tukaj poslušamo dotik
-        function tryEnableOnFirstTouch() {
-            if (motionEnabled) return;
-            // če requestPermission obstaja — pusti na gumbu, saj mora uporabnik potrditi (in gumb je gesto)
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                // ne delamo avtomatskega requesta - gumb bo to naredil
-                return;
-            } else {
-                // pri brskalnikih brez requestPermission lahko direktno nastavimo listener ob prvi interakciji
-                setupDeviceMotionListener();
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 40; i++) { 
+                particlesArray.push(new Particle());
             }
-            window.removeEventListener('touchstart', tryEnableOnFirstTouch);
         }
-        window.addEventListener('touchstart', tryEnableOnFirstTouch, {passive: true});
+        initParticles();
 
-        // Če brskalnik že podpira DeviceMotion brez permisije, omogoči takoj
-        if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission !== 'function') {
-            // omogoči samodejno (ni potrebe po requestu)
-            setupDeviceMotionListener();
-        }
-
-        // Clean up on pagehide (optional)
-        window.addEventListener('pagehide', () => {
-            if (motionHandlerRef) {
-                window.removeEventListener('devicemotion', motionHandlerRef);
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
             }
-        });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
     </script>
 </body>
 </html>
