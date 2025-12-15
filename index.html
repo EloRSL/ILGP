@@ -41,7 +41,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- OVOJNICA (INTRO SCREEN) - PRENOVLJENO --- */
+        /* --- OVOJNICA (INTRO SCREEN) --- */
         #intro-overlay {
             position: fixed;
             top: 0;
@@ -71,16 +71,14 @@
             position: relative;
             width: 300px;
             height: 200px;
-            background: #e0e0e0; /* Ozadje koverte (notranjost) */
+            background: #e0e0e0;
             border-radius: 0 0 10px 10px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Pismo poravnamo na dno */
-            /* overflow: hidden; SMO ODSTRANILI, DA SE PISMO VIDI KO GRE VEN */
+            align-items: flex-end;
         }
 
-        /* POKROV (Zgornji del) - Najvišji nivo */
         .envelope::before {
             content: '';
             position: absolute;
@@ -88,13 +86,12 @@
             left: 0;
             border-left: 150px solid transparent;
             border-right: 150px solid transparent;
-            border-top: 110px solid #f8f8f8; /* Svetlejša barva za pokrov */
+            border-top: 110px solid #f8f8f8;
             transform-origin: top;
             transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) 0s, z-index 0.1s 0.5s;
-            z-index: 20; /* Najvišje, dokler se ne odpre */
+            z-index: 20;
         }
 
-        /* ŽEPEK (Spodnji del) - Srednji nivo */
         .envelope::after {
             content: '';
             position: absolute;
@@ -107,20 +104,19 @@
             border-bottom: 100px solid #d0d0d0;
             border-top: 100px solid transparent;
             border-radius: 0 0 10px 10px;
-            z-index: 10; /* Višje od pisma, nižje od pokrova */
+            z-index: 10;
             pointer-events: none;
         }
 
-        /* PISMO - Najnižji nivo (skrito v žepku) */
         .letter {
             position: absolute;
-            width: 280px; /* Malo ožje od koverte, da lepše sede */
+            width: 280px;
             height: 170px; 
             background: #fffaf0; 
-            bottom: 0; /* Začnemo na dnu koverte */
-            left: 10px; /* Centrirano (300 - 280) / 2 */
-            transition: transform 5s ease-in-out, box-shadow 4s ease; /* ZELO POČASNO! */
-            z-index: 5; /* Nižje od žepka (10) */
+            bottom: 0;
+            left: 10px;
+            transition: transform 5s ease-in-out, box-shadow 4s ease;
+            z-index: 5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -138,22 +134,17 @@
             margin-bottom: 5px; 
         }
 
-        /* --- ANIMACIJE IN EFEKTI --- */
-
-        /* Ko se odpre: Pokrov gre nazaj */
         .envelope-container.open .envelope::before {
             transform: rotateX(180deg);
-            z-index: 1; /* Ko se odpre, gre pokrov čisto zadaj */
+            z-index: 1;
         }
 
-        /* Ko se odpre: Pismo gre gor */
         .envelope-container.open .letter {
-            transform: translateY(-120px); /* Dvigne se iz koverte */
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 107, 157, 0.4); /* EFEKT SIJAJA */
-            z-index: 5; /* Ko je zunaj, je nad vsem (opcijsko, lahko ostane v žepku) */
+            transform: translateY(-120px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 107, 157, 0.4);
+            z-index: 5;
         }
 
-        /* DODATNI EFEKT: Lebdeča srčka okoli pisma */
         .envelope-container.open .letter::after {
             content: '💖';
             position: absolute;
@@ -162,7 +153,7 @@
             font-size: 24px;
             animation: floatingHeart 3s infinite ease-in-out;
             opacity: 0;
-            animation-delay: 2s; /* Počaka da se pismo dvigne */
+            animation-delay: 2s;
         }
 
         .envelope-container.open .letter::before {
@@ -178,18 +169,18 @@
         }
         .envelope-container.open {
             animation: heart-pulse 1.5s infinite ease-in-out; 
-            transform: scale(1.02); /* Ohrani osnovni transform, da prepreči utripanje hover efekta */
+            transform: scale(1.02);
         }
         @keyframes floatingHeart {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateY(-60px) rotate(20deg); opacity: 0; } /* POPRAVEK: Dvigne se 60px navzgor (prej 40px) */
+            100% { transform: translateY(-60px) rotate(20deg); opacity: 0; }
         }
 
         @keyframes floatingSparkle {
-            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.2; } /* Dodan translateY(0) */
-            50% { transform: translateY(-30px) scale(1.2) rotate(180deg); opacity: 1; } /* Sredina animacije */
-            100% { transform: translateY(-60px) scale(0.8) rotate(360deg); opacity: 0; } /* POPRAVEK: Dvigne se 60px navzgor */
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.2; }
+            50% { transform: translateY(-30px) scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: translateY(-60px) scale(0.8) rotate(360deg); opacity: 0; }
         }
         @keyframes heart-pulse {
             0% { transform: scale(1.02); }
@@ -197,7 +188,7 @@
             100% { transform: scale(1.02); }
         }
                 
-        /* --- OSTALI STILI (Nespremenjeni) --- */
+        /* --- OSTALI STILI --- */
         .tap-hint { margin-top: 60px; color: rgba(255,255,255,0.7); font-size: 1em; letter-spacing: 1px; animation: pulse 2s infinite; }
         .main-content { opacity: 0; transition: opacity 1.5s ease; display: none; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px 15px 60px; position: relative; z-index: 2; }
@@ -213,20 +204,128 @@
         .time-label { font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
         .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.2em; margin: 80px 0 40px; position: relative; color: white; text-shadow: var(--text-shadow); }
         .section-title::after { content: '♡'; display: block; font-size: 0.7em; color: var(--primary); margin-top: 10px; font-family: 'Dancing Script', cursive; }
-        .timeline { position: relative; max-width: 100%; margin: 60px 0; padding: 20px 0; }
-        .timeline::after { content: ''; position: absolute; width: 3px; background: rgba(255,255,255,0.2); top: 0; bottom: 0; left: 50%; margin-left: -1.5px; border-radius: 5px; }
-        .timeline-item { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; box-sizing: border-box; opacity: 0; transform: translateY(50px); transition: all 1s ease; }
-        .timeline-item.visible { opacity: 1; transform: translateY(0); }
-        .timeline-item::after { content: '❤'; position: absolute; width: 36px; height: 36px; right: -18px; background-color: var(--primary); border: 4px solid #fff; top: 20px; border-radius: 50%; z-index: 1; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; box-shadow: 0 0 15px rgba(255, 107, 157, 0.5); }
-        .left { left: 0; }
-        .right { left: 50%; }
-        .left::before { content: " "; height: 0; position: absolute; top: 26px; width: 0; z-index: 1; right: 30px; border: medium solid white; border-width: 10px 0 10px 10px; border-color: transparent transparent transparent rgba(255,255,255,0.9); }
-        .right::before { content: " "; height: 0; position: absolute; top: 26px; width: 0; z-index: 1; left: 30px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent rgba(255,255,255,0.9) transparent transparent; }
-        .right::after { left: -18px; }
-        .content-box { padding: 25px; background: rgba(255,255,255,0.9); position: relative; border-radius: 15px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .content-box h3 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 8px; font-size: 1.4em; }
-        .date-label { font-size: 0.9em; color: var(--primary); display: block; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.5px; }
-        .content-box p { line-height: 1.6; font-size: 1.05em; }
+
+        /* --- TEDENSKA NAGRADNA IGRA (KUPONI) --- */
+        .coupon-section {
+            margin-bottom: 60px;
+            min-height: 300px;
+        }
+
+        .coupon-status-text {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* Skrijemo grid, ko je kupon že izbran */
+        .coupons-grid.hidden {
+            display: none;
+        }
+
+        .coupon-card {
+            background: linear-gradient(135deg, #fffaf0 0%, #ffe6f0 100%);
+            border: 2px dashed var(--primary);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: #444;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 250px;
+        }
+
+        .coupon-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .coupon-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.4);
+            background: white;
+            border-color: var(--accent);
+        }
+
+        .coupon-icon { font-size: 3em; margin-bottom: 10px; display: block; }
+        .coupon-title { font-family: 'Playfair Display', serif; font-size: 1.3em; color: var(--accent); margin-bottom: 10px; font-weight: 700; line-height: 1.2; }
+        .coupon-desc { font-size: 0.9em; line-height: 1.4; color: #666; margin-bottom: 10px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .coupon-action { font-size: 0.8em; color: var(--primary); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: auto; }
+
+        /* PRIKAZ IZBRANEGA KUPONA */
+        .active-coupon-container {
+            display: none; /* Privzeto skrito */
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .active-coupon-container.show {
+            display: flex;
+        }
+
+        .active-coupon-card {
+            background: #fff;
+            border: 4px solid var(--primary);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 107, 157, 0.6);
+            transform: scale(1.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Trakec čez kartico */
+        .active-coupon-card::before {
+            content: 'AKTIVNO';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: var(--accent);
+            color: white;
+            width: 120px;
+            padding: 5px 0;
+            transform: rotate(45deg);
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .active-coupon-icon { font-size: 5em; margin-bottom: 20px; display: block; animation: bounce 2s infinite; }
+        .active-coupon-title { font-family: 'Playfair Display', serif; font-size: 2em; color: #333; margin-bottom: 15px; }
+        .active-coupon-desc { font-size: 1.1em; color: #555; line-height: 1.6; margin-bottom: 20px; }
+        
+        .coupon-timer-box {
+            margin-top: 30px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .coupon-timer-label { font-size: 0.9em; opacity: 0.8; margin-bottom: 5px; display: block; }
+        .coupon-countdown { font-family: 'Playfair Display', serif; font-size: 1.5em; font-weight: bold; letter-spacing: 1px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
+
+        /* --- GALERIJA --- */
         .gallery-container { position: relative; height: 500px; display: flex; justify-content: center; align-items: center; perspective: 1000px; margin-bottom: 30px; }
         .polaroid { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); width: 320px; position: absolute; transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; cursor: pointer; border-radius: 3px; }
         .polaroid img { width: 100%; height: 300px; object-fit: cover; border: 1px solid #eee; }
@@ -235,10 +334,14 @@
         .polaroid.left { transform: translateX(-100px) translateY(20px) rotate(-12deg) scale(0.9); z-index: 5; opacity: 0.8; }
         .polaroid.right { transform: translateX(100px) translateY(20px) rotate(12deg) scale(0.9); z-index: 5; opacity: 0.8; }
         .gallery-hint { text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9em; margin-top: -20px; margin-bottom: 60px; }
+        
+        /* --- LJUBEZENSKO PISMO --- */
         .love-note-container { background: var(--glass); padding: 50px 30px; border-radius: 30px; margin: 80px auto; backdrop-filter: blur(20px); border: 2px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 700px; text-align: center; }
         .note-title { font-family: 'Dancing Script', cursive; font-size: 2.8em; margin-bottom: 30px; color: var(--primary); text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .note-text p { font-family: 'Playfair Display', serif; font-size: 1.3em; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 8px; text-shadow: var(--text-shadow); }
         .note-text br { display: block; margin: 15px 0; content: " "; }
+        
+        /* --- SRČKI IN OSTALO --- */
         .heart-section { text-align: center; margin: 100px 0 60px; position: relative; }
         .big-heart { font-size: 6em; color: var(--primary); cursor: pointer; display: inline-block; transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.7)); user-select: none; animation: heartbeat 1.5s ease-in-out infinite; }
         @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
@@ -255,11 +358,6 @@
         @media screen and (max-width: 768px) {
             h1 { font-size: 3.5em; }
             .subtitle { font-size: 1.1em; }
-            .timeline::after { left: 35px; } 
-            .timeline-item { width: 100%; padding-left: 75px; padding-right: 15px; }
-            .timeline-item::before { left: 65px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent rgba(255,255,255,0.9) transparent transparent; }
-            .left::after, .right::after { left: 17px; }
-            .right { left: 0%; }
             .gallery-container { height: 400px; }
             .polaroid { width: 260px; }
             .polaroid img { height: 240px; }
@@ -282,15 +380,17 @@
             }
 
             .letter { 
-                width: 240px; /* Prilagojena širina */
+                width: 240px; 
                 height: 140px; 
                 left: 10px;
                 bottom: 0;
             } 
             
             .envelope-container.open .letter { 
-                transform: translateY(-100px); /* Malo manjši dvig na telefonu */
-            } 
+                transform: translateY(-100px); 
+            }
+            
+            .coupons-grid { grid-template-columns: 1fr; }
         }
         @keyframes pulse { 0% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.6; transform: scale(1); } }
     </style>
@@ -344,30 +444,23 @@
                 </div>
             </div>
 
-            <h2 class="section-title">Najina Zgodba</h2>
-            <div class="timeline">
-                <div class="timeline-item left">
-                    <div class="content-box">
-                        <img src="photo1.JPG" alt="Začetek najine poti" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
-                        <h3>Uradni Začetek</h3>
-                        <span class="date-label">17. Februar 2024</span>
-                        <p>Dan, ko sva rekla "midva". Začetek najlepšega poglavja v mojem življenju. Skupaj zreva v isto smer.</p>
+            <h2 class="section-title">Tvoja Tedenska Srečka</h2>
+            <div class="coupon-section">
+                <p class="coupon-status-text" id="couponStatusText">Izberi eno kartico in odkrij svoj kupon za ta teden! ✨</p>
+                
+                <div class="coupons-grid" id="couponsSelectionGrid">
                     </div>
-                </div>
-                <div class="timeline-item right">
-                    <div class="content-box">
-                        <img src="photo3.JPG" alt="Tvoja igrivost" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
-                        <h3>Tvoja Igrivost</h3>
-                        <span class="date-label">Vsak dan</span>
-                        <p>Obožujem tvoj smisel za humor in kako znaš vsak trenutek spremeniti v zabavo. S tabo je življenje ena sama velika pustolovščina. Moja kraljica. 👑</p>
+
+                <div class="active-coupon-container" id="activeCouponContainer">
+                    <div class="active-coupon-card">
+                        <span class="active-coupon-icon" id="activeIcon">🎁</span>
+                        <div class="active-coupon-title" id="activeTitle">Naslov</div>
+                        <p class="active-coupon-desc" id="activeDesc">Opis kupona...</p>
                     </div>
-                </div>
-                <div class="timeline-item left">
-                    <div class="content-box">
-                        <img src="photo2.JPG" alt="Tvoja milina" style="width:100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee;">
-                        <h3>Tvoja Nežnost</h3>
-                        <span class="date-label">Danes in za vedno</span>
-                        <p>V tvojem objemu najdem svoj mir. Tvoja milina in toplina sta moj dom, ne glede na to, kje sva.</p>
+                    
+                    <div class="coupon-timer-box">
+                        <span class="coupon-timer-label">Naslednje žrebanje čez:</span>
+                        <div class="coupon-countdown" id="couponCountdown">0d 00h 00m 00s</div>
                     </div>
                 </div>
             </div>
@@ -431,7 +524,31 @@
         // --- KONFIGURACIJA DATUMA ---
         const startDate = new Date(2024, 1, 17); 
         
-        // --- SPREMENLJIVKE ZA DOM ELEMENTE ---
+        // --- BAZA KUPONOV ---
+        const couponPool = [
+            { icon: "💆‍♀️", title: "Masaža Hrbta", desc: "30 minutna sproščujoča masaža hrbta z oljem po izbiri." },
+            { icon: "🍿", title: "Filmski Večer", desc: "Pri meni: jaz pripravim kokice in pijačo, ti izbereš film." },
+            { icon: "👨‍🍳", title: "Masterchef Večerja", desc: "Pripravim ti večerjo pri meni. Ti samo prideš in uživaš." },
+            { icon: "🥞", title: "Zajtrk v Posteljo", desc: "Ko prespiš: kraljevski začetek dneva, postrežen v postelji." },
+            { icon: "🚕", title: "Osebni Šofer", desc: "Poberem te ali peljem, kamor želiš (znotraj razuma!)." },
+            { icon: "🍕", title: "Pizza Večer", desc: "Naročiva ali spečeva najboljšo pizzo." },
+            { icon: "🍦", title: "Sladoledni Zmenek", desc: "Peljem te na najboljši sladoled v mestu (jaz častim)." },
+            { icon: "💆‍♀️", title: "Masaža Lasišča", desc: "5 minutno čohanje po glavi za popolno sprostitev." },
+            { icon: "🍷", title: "Vino & Debata", desc: "Brez telefonov, samo midva, kozarec vina in dober pogovor." },
+            { icon: "🃏", title: "Joker Kupon", desc: "Ena želja po tvoji izbiri (v mejah normale!)." },
+            { icon: "👣", title: "Masaža Stopal", desc: "Po dolgem dnevu si tvoja stopala zaslužijo razvajanje." },
+            { icon: "🚗", title: "Izlet v Neznano", desc: "Usediva se v avto in se odpeljeva na kavo na lep razgled." },
+            { icon: "🍫", title: "Sladka Dostava", desc: "Dostavim ti tvojo najljubšo čokolado, ko imaš 'sladko krizo'." },
+            { icon: "💋", title: "Napad Poljubčkov", desc: "Unovčljivo takoj. Pripravi se na 100 poljubčkov." },
+            { icon: "🎲", title: "Večer Iger", desc: "Izzovem te v tvoji najljubši družabni igri." },
+            { icon: "🛁", title: "Spa Večer", desc: "Pripravim ti masko za obraz in svečke." },
+            { icon: "🛍️", title: "Shopping Asistent", desc: "Greva v šoping, jaz sem tvoj osebni nosač vrečk in svetovalec." },
+            { icon: "📸", title: "Photo Session", desc: "Naredim ti 5 top fotk za Instagram (brez pritoževanja!)." },
+            { icon: "🕺", title: "Ples v Dvoje", desc: "Zavrtiva se na najino pesem v moji dnevni sobi." },
+            { icon: "🥞", title: "Palačinke Party", desc: "Spečem goro palačink z Nutello (ali marmelado)." }
+        ];
+
+        // --- GLOBALNE SPREMENLJIVKE ---
         const envelopeBtn = document.getElementById('envelopeBtn');
         const introOverlay = document.getElementById('intro-overlay');
         const mainContent = document.getElementById('mainContent');
@@ -440,7 +557,137 @@
         
         let isMusicPlaying = false;
 
-        // --- 1. ODPIRANJE OVOJNICE (POČASNEJŠE IN POPRAVLJENO) ---
+        // --- 1. LOGIKA KUPONOV (NAGRADNA IGRA) ---
+        const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 7 dni
+        // const WEEK_IN_MS = 10 * 1000; // ZA TESTIRANJE: 10 sekund (odkomentiraj za test)
+
+        function initCoupons() {
+            const lastClaimRaw = localStorage.getItem('gaja_last_claim');
+            const activeCouponRaw = localStorage.getItem('gaja_active_coupon');
+            const usedIndicesRaw = localStorage.getItem('gaja_used_indices');
+
+            const now = new Date().getTime();
+            let lastClaim = lastClaimRaw ? parseInt(lastClaimRaw) : 0;
+            let usedIndices = usedIndicesRaw ? JSON.parse(usedIndicesRaw) : [];
+
+            // Preveri, če je kupon še veljaven (manj kot teden dni)
+            if (activeCouponRaw && (now - lastClaim < WEEK_IN_MS)) {
+                // Kupon je še aktiven
+                const coupon = JSON.parse(activeCouponRaw);
+                showActiveCouponUI(coupon, lastClaim + WEEK_IN_MS);
+            } else {
+                // Čas za nov izbor!
+                setupSelectionUI(usedIndices);
+            }
+        }
+
+        function setupSelectionUI(usedIndices) {
+            const grid = document.getElementById('couponsSelectionGrid');
+            const statusText = document.getElementById('couponStatusText');
+            const activeContainer = document.getElementById('activeCouponContainer');
+
+            grid.classList.remove('hidden');
+            activeContainer.classList.remove('show');
+            statusText.innerText = "Tvoj teden se začne zdaj! Izberi eno kartico:";
+            grid.innerHTML = '';
+
+            // Algoritem za izbor 4 naključnih kuponov, ki se ne ponavljajo
+            let availableIndices = [];
+            for(let i=0; i<couponPool.length; i++) {
+                if(!usedIndices.includes(i)) availableIndices.push(i);
+            }
+
+            // Če zmanjka kuponov, resetiraj zgodovino
+            if (availableIndices.length < 4) {
+                usedIndices = [];
+                availableIndices = couponPool.map((_, i) => i);
+                localStorage.setItem('gaja_used_indices', JSON.stringify([]));
+            }
+
+            // Premešaj razpoložljive in vzemi 4
+            const shuffled = availableIndices.sort(() => 0.5 - Math.random());
+            const selectedIndices = shuffled.slice(0, 4);
+
+            selectedIndices.forEach(index => {
+                const coupon = couponPool[index];
+                const card = document.createElement('div');
+                card.className = 'coupon-card visible';
+                card.innerHTML = `
+                    <span class="coupon-icon">❓</span>
+                    <div class="coupon-title">Skriti Kupon</div>
+                    <p class="coupon-desc">Klikni za razkritje...</p>
+                    <div class="coupon-action">IZBERI</div>
+                `;
+                
+                card.onclick = () => selectCoupon(index, usedIndices);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectCoupon(index, usedIndices) {
+            const coupon = couponPool[index];
+            const now = new Date().getTime();
+
+            // Shrani v localStorage
+            localStorage.setItem('gaja_last_claim', now);
+            localStorage.setItem('gaja_active_coupon', JSON.stringify(coupon));
+            
+            usedIndices.push(index);
+            localStorage.setItem('gaja_used_indices', JSON.stringify(usedIndices));
+
+            // Pokaži UI za aktiven kupon
+            showActiveCouponUI(coupon, now + WEEK_IN_MS);
+        }
+
+        function showActiveCouponUI(coupon, expiryTime) {
+            const grid = document.getElementById('couponsSelectionGrid');
+            const statusText = document.getElementById('couponStatusText');
+            const activeContainer = document.getElementById('activeCouponContainer');
+
+            grid.classList.add('hidden');
+            grid.innerHTML = ''; // Počisti
+            statusText.innerText = "Tvoj ekskluzivni kupon za ta teden:";
+            
+            document.getElementById('activeIcon').innerText = coupon.icon;
+            document.getElementById('activeTitle').innerText = coupon.title;
+            document.getElementById('activeDesc').innerText = coupon.desc;
+
+            activeContainer.classList.add('show');
+
+            // Zaženi timer
+            startCouponTimer(expiryTime);
+        }
+
+        function startCouponTimer(expiryTime) {
+            const timerEl = document.getElementById('couponCountdown');
+            
+            // Počisti prejšnji interval, če obstaja
+            if (window.couponInterval) clearInterval(window.couponInterval);
+
+            function update() {
+                const now = new Date().getTime();
+                const distance = expiryTime - now;
+
+                if (distance < 0) {
+                    clearInterval(window.couponInterval);
+                    timerEl.innerText = "Čas je za nov kupon! Osveži stran.";
+                    // Opcijsko: lahko avtomatsko osvežimo UI, ampak refresh je varnejši
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            update();
+            window.couponInterval = setInterval(update, 1000);
+        }
+
+        // --- 2. ODPIRANJE OVOJNICE ---
         envelopeBtn.addEventListener('click', () => {
             envelopeBtn.classList.add('open');
             document.querySelector('.tap-hint').style.opacity = '0';
@@ -449,9 +696,8 @@
             bgMusic.play().then(() => {
                 isMusicPlaying = true;
                 musicToggle.innerHTML = '⏸'; 
-            }).catch(e => console.log("Samodejno predvajanje ni uspelo, uporabnik mora klikniti gumb za glasbo."));
+            }).catch(e => console.log("Audio play error"));
 
-            // Počakamo na animacijo (2000ms je dovolj za sinhronizacijo)
             setTimeout(() => {
                 introOverlay.style.opacity = '0';
                 introOverlay.style.visibility = 'hidden';
@@ -459,12 +705,12 @@
                 
                 setTimeout(() => {
                     mainContent.style.opacity = '1';
-                    initTimelineObserver(); 
+                    initCoupons(); // INICIALIZACIJA KUPONOV
                 }, 100);
             }, 6000); 
         });
 
-        // --- 2. NADZOR GLASBE ---
+        // --- 3. NADZOR GLASBE ---
         musicToggle.addEventListener('click', () => {
             if (isMusicPlaying) {
                 bgMusic.pause();
@@ -476,11 +722,10 @@
             isMusicPlaying = !isMusicPlaying;
         });
 
-        // --- 3. LOGIKA ŠTEVCA ZVEZE ---
+        // --- 4. ŠTEVEC ZVEZE ---
         function updateTimer() {
             const now = new Date();
             const diff = now - startDate; 
-
             const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
             const years = Math.floor(daysTotal / 365);
             const days = daysTotal % 365;
@@ -497,66 +742,34 @@
         updateTimer();
         setInterval(updateTimer, 1000);
 
-        // --- 4. LOGIKA POLAROID GALERIJE ---
+        // --- 5. GALERIJA ---
         const cards = document.querySelectorAll('.polaroid');
         let currentIndex = 0;
-
         function updateCards() {
             cards.forEach((card, index) => {
                 card.classList.remove('active', 'left', 'right');
-                
                 let position = (index - currentIndex + cards.length) % cards.length;
-
-                if (position === 0) {
-                    card.classList.add('active'); 
-                } else if (position === 1) {
-                    card.classList.add('right'); 
-                } else {
-                    card.classList.add('left'); 
-                }
+                if (position === 0) card.classList.add('active'); 
+                else if (position === 1) card.classList.add('right'); 
+                else card.classList.add('left'); 
             });
         }
-
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % cards.length;
-                updateCards();
-            });
-        });
+        cards.forEach(card => card.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCards();
+        }));
         updateCards();
 
-        // --- 5. ANIMACIJA ČASOVNICE (Scroll) ---
-        function initTimelineObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.2 }); 
-
-            document.querySelectorAll('.timeline-item').forEach(item => {
-                observer.observe(item);
-            });
-        }
-
-        // --- 6. INTERAKTIVNO SRCE (Eksplozija) ---
+        // --- 6. SRCE ---
         const tapHeart = document.getElementById('tapHeart');
         const tapCounterDisplay = document.getElementById('tapCounter');
         let taps = 0;
-
         tapHeart.addEventListener('pointerdown', (e) => {
             e.preventDefault(); 
             taps++;
             tapCounterDisplay.innerText = taps;
-
             const rect = tapHeart.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            for(let i = 0; i < 10; i++) {
-                createMiniHeart(centerX, centerY);
-            }
+            for(let i=0; i<10; i++) createMiniHeart(rect.left + rect.width/2, rect.top + rect.height/2);
         });
 
         function createMiniHeart(x, y) {
@@ -565,34 +778,23 @@
             heart.className = 'mini-heart';
             const size = Math.random() * 20 + 15;
             heart.style.fontSize = size + 'px';
-            
             heart.style.left = (x - size/2) + 'px';
             heart.style.top = (y - size/2) + 'px';
-            
             document.body.appendChild(heart);
-
             const angle = Math.random() * Math.PI * 2; 
             const velocity = Math.random() * 150 + 80; 
-            const moveX = Math.cos(angle) * velocity;
-            const moveY = Math.sin(angle) * velocity - 100; 
-
             setTimeout(() => {
-                 heart.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${Math.random()*360}deg) scale(0)`;
+                 heart.style.transform = `translate(${Math.cos(angle)*velocity}px, ${Math.sin(angle)*velocity - 100}px) rotate(${Math.random()*360}deg) scale(0)`;
                  heart.style.opacity = '0';
             }, 10);
-
             setTimeout(() => heart.remove(), 1000);
         }
 
-        // --- 7. ANIMIRANO OZADJE (Delci/Srčki) ---
+        // --- 7. PARTICLES ---
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -610,7 +812,6 @@
                 if (this.y < -50) {
                     this.y = canvas.height + 50;
                     this.x = Math.random() * canvas.width;
-                    this.opacity = Math.random() * 0.4 + 0.1;
                 }
             }
             draw() {
@@ -619,21 +820,11 @@
                 ctx.fillText(this.type, this.x, this.y);
             }
         }
-
-        function initParticles() {
-            particlesArray = [];
-            for (let i = 0; i < 40; i++) { 
-                particlesArray.push(new Particle());
-            }
-        }
+        function initParticles() { for (let i = 0; i < 40; i++) particlesArray.push(new Particle()); }
         initParticles();
-
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
+            particlesArray.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
