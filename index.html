@@ -209,6 +209,9 @@
         .coupon-section {
             margin-bottom: 60px;
             min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .coupon-status-text {
@@ -217,15 +220,46 @@
             font-size: 1.2em;
             margin-bottom: 25px;
             color: rgba(255,255,255,0.9);
+            width: 100%;
+        }
+        
+        /* GUMB ZA ZAČETEK ŽREBANJA */
+        .start-draw-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.5);
+            transition: all 0.3s ease;
+            display: none; /* Privzeto skrit, JS ga pokaže */
+            animation: pulse-btn 2s infinite;
+            margin-bottom: 20px;
+        }
+        
+        .start-draw-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pulse-btn {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 107, 157, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 157, 0); }
         }
 
         .coupons-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
+            width: 100%;
+            justify-content: center; /* Da so 3 lepo na sredini */
         }
 
-        /* Skrijemo grid, ko je kupon že izbran */
+        /* Skrijemo grid, ko je kupon že izbran ali še ni žrebano */
         .coupons-grid.hidden {
             display: none;
         }
@@ -241,17 +275,22 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0; /* Začetno stanje za animacijo */
+            transform: scale(0.8);
             display: flex;
             flex-direction: column;
             justify-content: center;
             height: 250px;
         }
+        
+        /* Animacija prikaza kartic */
+        .coupon-card.pop-in {
+            animation: popInCard 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
 
-        .coupon-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes popInCard {
+            0% { opacity: 0; transform: scale(0.5) translateY(50px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .coupon-card:hover {
@@ -272,6 +311,7 @@
             flex-direction: column;
             align-items: center;
             animation: fadeIn 1s ease;
+            width: 100%;
         }
 
         .active-coupon-container.show {
@@ -326,7 +366,7 @@
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
 
         /* --- GALERIJA --- */
-        .gallery-container { position: relative; height: 500px; display: flex; justify-content: center; align-items: center; perspective: 1000px; margin-bottom: 30px; }
+        .gallery-container { position: relative; height: 500px; display: flex; justify-content: center; align-items: center; perspective: 1000px; margin-bottom: 30px; width: 100%; }
         .polaroid { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); width: 320px; position: absolute; transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; cursor: pointer; border-radius: 3px; }
         .polaroid img { width: 100%; height: 300px; object-fit: cover; border: 1px solid #eee; }
         .caption { font-family: 'Dancing Script', cursive; color: #444; font-size: 1.6em; text-align: center; margin-top: 20px; transform: rotate(-1deg); }
@@ -446,9 +486,11 @@
 
             <h2 class="section-title">Tvoja Tedenska Srečka</h2>
             <div class="coupon-section">
-                <p class="coupon-status-text" id="couponStatusText">Izberi eno kartico in odkrij svoj kupon za ta teden! ✨</p>
+                <p class="coupon-status-text" id="couponStatusText">Preveri, kaj ti prinaša sreča ta teden! ✨</p>
                 
-                <div class="coupons-grid" id="couponsSelectionGrid">
+                <button class="start-draw-btn" id="startDrawBtn">✨ Premešaj in izberi ✨</button>
+
+                <div class="coupons-grid hidden" id="couponsSelectionGrid">
                     </div>
 
                 <div class="active-coupon-container" id="activeCouponContainer">
@@ -459,7 +501,7 @@
                     </div>
                     
                     <div class="coupon-timer-box">
-                        <span class="coupon-timer-label">Naslednje žrebanje čez:</span>
+                        <span class="coupon-timer-label">Nov kupon bo na voljo čez:</span>
                         <div class="coupon-countdown" id="couponCountdown">0d 00h 00m 00s</div>
                     </div>
                 </div>
@@ -554,13 +596,14 @@
         const mainContent = document.getElementById('mainContent');
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
+        const startDrawBtn = document.getElementById('startDrawBtn');
         
         let isMusicPlaying = false;
 
         // --- 1. LOGIKA KUPONOV (NAGRADNA IGRA) ---
-        const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 7 dni
-        // const WEEK_IN_MS = 10 * 1000; // ZA TESTIRANJE: 10 sekund (odkomentiraj za test)
-
+        // SPREMENJENO: Čas čakanja je zdaj 5 dni
+        const WAIT_DAYS_IN_MS = 5 * 24 * 60 * 60 * 1000; 
+        
         function initCoupons() {
             const lastClaimRaw = localStorage.getItem('gaja_last_claim');
             const activeCouponRaw = localStorage.getItem('gaja_active_coupon');
@@ -570,48 +613,66 @@
             let lastClaim = lastClaimRaw ? parseInt(lastClaimRaw) : 0;
             let usedIndices = usedIndicesRaw ? JSON.parse(usedIndicesRaw) : [];
 
-            // Preveri, če je kupon še veljaven (manj kot teden dni)
-            if (activeCouponRaw && (now - lastClaim < WEEK_IN_MS)) {
+            // Preveri, če je kupon še veljaven (manj kot 5 dni)
+            if (activeCouponRaw && (now - lastClaim < WAIT_DAYS_IN_MS)) {
                 // Kupon je še aktiven
                 const coupon = JSON.parse(activeCouponRaw);
-                showActiveCouponUI(coupon, lastClaim + WEEK_IN_MS);
+                showActiveCouponUI(coupon, lastClaim + WAIT_DAYS_IN_MS);
             } else {
-                // Čas za nov izbor!
-                setupSelectionUI(usedIndices);
+                // Čas za nov izbor - Pokaži gumb za začetek
+                showStartButton();
             }
         }
 
+        function showStartButton() {
+            const grid = document.getElementById('couponsSelectionGrid');
+            const activeContainer = document.getElementById('activeCouponContainer');
+            const statusText = document.getElementById('couponStatusText');
+
+            grid.classList.add('hidden');
+            activeContainer.classList.remove('show');
+            startDrawBtn.style.display = 'block'; // Pokaži gumb
+            statusText.innerText = "Čas je za nov kupon! Klikni gumb spodaj za žrebanje.";
+        }
+
+        // Ko klikne gumb, sprožimo animacijo in prikažemo kartice
+        startDrawBtn.addEventListener('click', () => {
+            const usedIndicesRaw = localStorage.getItem('gaja_used_indices');
+            let usedIndices = usedIndicesRaw ? JSON.parse(usedIndicesRaw) : [];
+            
+            // 1. Skrij gumb
+            startDrawBtn.style.display = 'none';
+            document.getElementById('couponStatusText').innerText = "Izberi eno kartico...";
+            
+            // 2. Pripravi in prikaži kartice z zamikom
+            setupSelectionUI(usedIndices);
+        });
+
         function setupSelectionUI(usedIndices) {
             const grid = document.getElementById('couponsSelectionGrid');
-            const statusText = document.getElementById('couponStatusText');
-            const activeContainer = document.getElementById('activeCouponContainer');
-
             grid.classList.remove('hidden');
-            activeContainer.classList.remove('show');
-            statusText.innerText = "Tvoj teden se začne zdaj! Izberi eno kartico:";
             grid.innerHTML = '';
 
-            // Algoritem za izbor 4 naključnih kuponov, ki se ne ponavljajo
+            // Algoritem za izbor 3 naključnih kuponov (prej 4)
             let availableIndices = [];
             for(let i=0; i<couponPool.length; i++) {
                 if(!usedIndices.includes(i)) availableIndices.push(i);
             }
 
-            // Če zmanjka kuponov, resetiraj zgodovino
-            if (availableIndices.length < 4) {
+            // Če zmanjka kuponov (manj kot 3 na voljo), resetiraj
+            if (availableIndices.length < 3) {
                 usedIndices = [];
                 availableIndices = couponPool.map((_, i) => i);
                 localStorage.setItem('gaja_used_indices', JSON.stringify([]));
             }
 
-            // Premešaj razpoložljive in vzemi 4
             const shuffled = availableIndices.sort(() => 0.5 - Math.random());
-            const selectedIndices = shuffled.slice(0, 4);
+            const selectedIndices = shuffled.slice(0, 3); // IZBEREMO 3 KUPONE
 
-            selectedIndices.forEach(index => {
+            selectedIndices.forEach((index, i) => {
                 const coupon = couponPool[index];
                 const card = document.createElement('div');
-                card.className = 'coupon-card visible';
+                card.className = 'coupon-card'; // Brez 'visible' razreda na začetku
                 card.innerHTML = `
                     <span class="coupon-icon">❓</span>
                     <div class="coupon-title">Skriti Kupon</div>
@@ -621,6 +682,11 @@
                 
                 card.onclick = () => selectCoupon(index, usedIndices);
                 grid.appendChild(card);
+
+                // ANIMACIJA: Kartice se pojavijo ena za drugo (zamik 200ms)
+                setTimeout(() => {
+                    card.classList.add('pop-in');
+                }, i * 200);
             });
         }
 
@@ -636,17 +702,20 @@
             localStorage.setItem('gaja_used_indices', JSON.stringify(usedIndices));
 
             // Pokaži UI za aktiven kupon
-            showActiveCouponUI(coupon, now + WEEK_IN_MS);
+            showActiveCouponUI(coupon, now + WAIT_DAYS_IN_MS);
         }
 
         function showActiveCouponUI(coupon, expiryTime) {
             const grid = document.getElementById('couponsSelectionGrid');
             const statusText = document.getElementById('couponStatusText');
             const activeContainer = document.getElementById('activeCouponContainer');
+            
+            // Prepričamo se, da je gumb skrit, če pridemo direktno sem
+            startDrawBtn.style.display = 'none';
 
             grid.classList.add('hidden');
-            grid.innerHTML = ''; // Počisti
-            statusText.innerText = "Tvoj ekskluzivni kupon za ta teden:";
+            grid.innerHTML = ''; 
+            statusText.innerText = "Tvoj ekskluzivni kupon za naslednjih 5 dni:";
             
             document.getElementById('activeIcon').innerText = coupon.icon;
             document.getElementById('activeTitle').innerText = coupon.title;
@@ -654,14 +723,11 @@
 
             activeContainer.classList.add('show');
 
-            // Zaženi timer
             startCouponTimer(expiryTime);
         }
 
         function startCouponTimer(expiryTime) {
             const timerEl = document.getElementById('couponCountdown');
-            
-            // Počisti prejšnji interval, če obstaja
             if (window.couponInterval) clearInterval(window.couponInterval);
 
             function update() {
@@ -671,7 +737,6 @@
                 if (distance < 0) {
                     clearInterval(window.couponInterval);
                     timerEl.innerText = "Čas je za nov kupon! Osveži stran.";
-                    // Opcijsko: lahko avtomatsko osvežimo UI, ampak refresh je varnejši
                     return;
                 }
 
